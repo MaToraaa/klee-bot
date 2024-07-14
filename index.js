@@ -15,9 +15,10 @@ app.use(express.json());
 app.listen(port, () => console.log(`Listening on ${port}`));
 bot.launch();
 
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/index.html"));
-// });
+app.get("/", (req, res) => {
+  res.status(200).json("Klee listening...")
+  // res.sendFile(path.join(__dirname + "/index.html"));
+});
 
 
 
