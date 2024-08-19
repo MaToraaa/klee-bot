@@ -18,4 +18,5 @@ COPY . .
 EXPOSE 3333
 
 # Jalankan bot
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
+# CMD ["npm", "run", "dev"]

@@ -46,7 +46,6 @@ bot.command("dare", async (ctx) => {
 });
 
 bot.command(['wyr'], async (ctx) => {
-  console.log(ctx.from);
   getMsg('https://api.truthordarebot.xyz/api/wyr',ctx)
 });
 
