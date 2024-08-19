@@ -3,7 +3,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from 'url';
 import { Telegraf } from "telegraf";
-import { getMsg } from "./lib/function.js";
+import { getMsg, jadwalsholat } from "./lib/function.js";
 import axios from "axios";
 dotenv.config();
 
@@ -15,9 +15,13 @@ app.use(express.json());
 app.listen(port, () => console.log(`Listening on ${port}`));
 bot.launch();
 
-app.get("/", (req, res) => {
-  res.status(200).json("Klee listening...")
-  // res.sendFile(path.join(__dirname + "/index.html"));
+app.get("/", async (req, res) => {
+  try {
+    res.status(200).json({ message : "Klee Listening..." });
+  } catch (error) {
+    console.error("Error fetching translation:", error);
+    res.status(500).json({ error: 'Error fetching translation' });
+  }
 });
 
 
@@ -63,6 +67,13 @@ bot.command("usd", (ctx) => {
     bot.telegram.sendMessage(ctx.chat.id, message, {});
   });
 });
+
+bot.command('qrcode', (ctx) => {
+  console.log("🚀 ~ getMsg ~ ctx:", ctx.from)
+  const user = ctx.from
+  
+})
+
 bot.command("quotes", (ctx) => {
   console.log(ctx.from);
   axios.get(`https://api.quotable.io/random`).then((response) => {
@@ -76,6 +87,11 @@ bot.command("quotes", (ctx) => {
   });
 });
 
+bot.command('sholat', async (ctx) => {
+  const data = await jadwalsholat()
+  const msg = `${JSON.stringify(data)}`
+  bot.telegram.sendMessage(ctx.chat.id, msg, {});
+})
 
 bot.command(['help','menu'], (ctx) => {
   console.log(ctx.from);
@@ -94,8 +110,12 @@ paranoia - Get Paranoia Question
 });
 
 
-bot.on("text", (ctx) => {
+bot.on("text", async(ctx) => {
   const text = ctx.message.text; // works!
+  console.log("🚀 ~ getMsg ~ ctx:", ctx.from)
+
   console.log(text);
-  ctx.reply('Yaw!')
+  if(text === 'p'){
+    ctx.reply('Yaw!')
+  }
 });
